@@ -1,9 +1,7 @@
-# services/ai_tutor.py
-
 import os
 from dotenv import load_dotenv
-from langchain.chains import ConversationChain
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
+from langchain_core.runnables.history import RunnableWithMessageHistory
 
 # Load environment variables from a .env file
 load_dotenv()
@@ -22,8 +20,14 @@ class AITutor:
         # ChatOpenAI is preferred for conversational models.
         self.client = ChatOpenAI(openai_api_key=self.api_key)
 
-        # Initialize the conversation chain with the language model.
-        self.chain = ConversationChain(llm=self.client)
+        # Define a function to get session history (you may need to implement this).
+        def get_session_history():
+            # Implement your logic to get session history here.
+            # For now, we'll use an empty list as a placeholder.
+            return []
+
+        # Initialize the conversation chain with the language model and session history.
+        self.chain = RunnableWithMessageHistory(llm=self.client, runnable=self.client, get_session_history=get_session_history)
 
     def start_conversation(self, user_input: str) -> str:
         """
@@ -35,7 +39,7 @@ class AITutor:
         Returns:
             str: The AI tutor's response.
         """
-        response = self.chain.run(input=user_input)
+        response = self.chain.invoke(input=user_input)
         return response
 
 # The following block is for simple local testing.

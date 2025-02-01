@@ -1,8 +1,8 @@
 # routes/ai_routes.py
 from flask import Blueprint, request, jsonify
-from models.ai_tutor import AITutor  # Ensure this path matches your project structure
+from src.models.ai_tutor import AITutor  # Ensure this path matches your project structure
 
-ai_routes = Blueprint("ai_routes", __name__)
+ai_routes = Blueprint("ask_tutor", __name__)
 tutor = AITutor()  # Uses the API key from the environment variable
 
 @ai_routes.route("/api/ask", methods=["POST"])

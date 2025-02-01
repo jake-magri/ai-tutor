@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from db.db import users_collection
+from src.db.db import users_collection
 
 book_routes = Blueprint("book_routes", __name__)
 

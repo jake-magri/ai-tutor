@@ -33,7 +33,7 @@ export const loginUser = (userData: User) => {
 
 // save book data for a logged in user
 export const saveBook = (bookData: Book, token: string) => {
-  return fetch('/api/users', {
+  return fetch('/api/users/books', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -57,4 +57,21 @@ export const deleteBook = (bookId: string, token: string) => {
 // https://www.googleapis.com/books/v1/volumes?q=harry+potter
 export const searchGoogleBooks = (query: string) => {
   return fetch(`https://www.googleapis.com/books/v1/volumes?q=${query}`);
+};
+
+// ask a question to the AI tutor
+export const askTutor = async (prompt: string): Promise<Response> => {
+  try {
+    const response = await fetch('/api/ask', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt }),
+    });
+    return response;
+  } catch (error) {
+    console.error('Error asking AI tutor:', error);
+    throw error;
+  }
 };
