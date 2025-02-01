@@ -4,25 +4,22 @@ from src.db.db import users_collection
 
 book_routes = Blueprint("book_routes", __name__)
 
-# Save a book to a user's collection
 @book_routes.route("/api/users/books", methods=["PUT"])
 @jwt_required()
 def save_book():
     current_user_email = get_jwt_identity()
     book_data = request.get_json()
 
-    if not book_data or "id" not in book_data:
+    if not book_data or "bookId" not in book_data:
         return jsonify({"error": "Book data with a valid ID is required"}), 400
 
     users_collection.update_one(
         {"email": current_user_email},
-        {"$addToSet": {"saved_books": book_data}}  # Ensures no duplicate entries
+        {"$addToSet": {"savedBooks": book_data}}
     )
 
     return jsonify({"message": "Book saved successfully"}), 200
 
-
-# Delete a saved book from a user's collection
 @book_routes.route("/api/users/books/<book_id>", methods=["DELETE"])
 @jwt_required()
 def delete_book(book_id):
@@ -30,10 +27,12 @@ def delete_book(book_id):
 
     result = users_collection.update_one(
         {"email": current_user_email},
-        {"$pull": {"saved_books": {"id": book_id}}}
+        {"$pull": {"savedBooks": {"bookId": book_id}}}
     )
 
     if result.modified_count == 0:
         return jsonify({"error": "Book not found or already removed"}), 404
+    
+    updated_user = users_collection.find_one({"email": current_user_email}, {"_id": 0, "password": 0})
 
-    return jsonify({"message": "Book removed successfully"}), 200
+    return jsonify(updated_user), 200

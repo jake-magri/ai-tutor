@@ -12,7 +12,7 @@ DB_NAME = os.getenv("DB_NAME", "default_db")
 # Create a MongoDB client
 client = MongoClient(MONGO_URI)
 db = client[DB_NAME] # Get the database instance
-
+print("Connected to MongoDB!")
 # Access collections (optional)
 users_collection = db.get_collection("users")
 books_collection = db.get_collection("books")
