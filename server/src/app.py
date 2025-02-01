@@ -5,8 +5,8 @@ from routes.user_routes import user_routes
 from dotenv import load_dotenv
 import os
 from routes.book_routes import book_routes
-
 from routes.auth_routes import auth_routes
+from routes.ai_tutor_routes import ask_tutor
 
 
 
@@ -25,6 +25,7 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 app.register_blueprint(user_routes)
 app.register_blueprint(auth_routes)
 app.register_blueprint(book_routes)
+app.register_blueprint(ask_tutor)
 @app.route('/')
 def home():
     return jsonify(message="Hello from Flask!")
